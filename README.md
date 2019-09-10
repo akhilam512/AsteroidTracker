@@ -15,10 +15,20 @@ The application serves as a tracker for nearby asteroids. For a given day, the a
 
 ### Data Retrieval 
 
-The application will retrieve the asteroid data using NASA’s open API.  In order to get data , the application will send GET requests to the specified endpoint using DEMO_KEY which allows about 50 req/hour without authentication.
+The application will retrieve the asteroid data using [NASA’s open API](https://api.nasa.gov/api.html#authentication).  In order to get data , the application will send GET requests to the specified endpoint using DEMO_KEY which allows about 50 req/hour without authentication.
+
+------
+#### Main Panel 
+<img src="/Panel1.png">
+
+------
 
 ## Creators
 
-- Suraj K Suresh
-- Akhil K Gangadharan
+- Suraj K Suresh (@Freakston)
+- Akhil K Gangadharan (@akhilam512)
+
+## License
+
+This project is licensed under GNU GPL v3.
 
