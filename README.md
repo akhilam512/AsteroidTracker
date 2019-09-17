@@ -21,6 +21,13 @@ The application will retrieve the asteroid data using [NASA’s open API](https:
 #### Main Panel 
 <img src="/Panel1.png">
 
+#### Asteroid List Panel
+<img src ="/Panel2.PNG">
+
+#### Asteroid Detail Panel
+<img src ="/Panel3.PNG">
+
+
 ------
 
 ## Creators
