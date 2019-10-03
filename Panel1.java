@@ -16,13 +16,18 @@ public class Panel1 extends JPanel {
         jcomp1 = new JButton ("SUBMIT");
         jcomp2 = new JButton ("Asteroid Data");
         jcomp3 = new JButton ("Closest Asteroid");
-        jcomp4 = new JLabel ("                                  Asteroid Tracker");
-        jcomp5 = new JLabel ("Enter Date -");
+        jcomp4 = new JLabel ("Asteroid Tracker");
+        jcomp5 = new JLabel ("Enter Date: ");
+
         jcomp6 = new JTextArea (5, 5);
 
         //adjust size and set layout
         setPreferredSize (new Dimension (497, 496));
         setLayout (null);
+
+        // add fonts 
+        jcomp4.setFont(new Font("Tahoma", Font.BOLD, 23));
+        jcomp5.setFont(new Font("Tahoma", Font.BOLD, 15));
 
         //add components
         add (jcomp1);
@@ -36,7 +41,7 @@ public class Panel1 extends JPanel {
         jcomp1.setBounds (150, 250, 200, 25);
         jcomp2.setBounds (50, 350, 150, 50);
         jcomp3.setBounds (300, 350, 150, 50);
-        jcomp4.setBounds (50, 50, 400, 80);
+        jcomp4.setBounds (150, 50, 400, 80);
         jcomp5.setBounds (150, 160, 100, 45);
         jcomp6.setBounds (150, 205, 200, 25);
     }
