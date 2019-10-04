@@ -6,6 +6,7 @@ import javax.swing.SwingConstants;
 import javax.swing.JTable;
 import javax.swing.JScrollPane;
 import javax.swing.table.DefaultTableModel;
+import java.util.HashMap;
 
 public class AsteroidDetail {
 
@@ -18,13 +19,7 @@ public class AsteroidDetail {
 	}
 
 	public AsteroidDetail() {
-		asteroid = new JFrame();
-		String Name = new String("TEST 1");
-		asteroid.setTitle(Name);
-		asteroid.setBounds(0, 20, 500, 600);
-		asteroid.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		asteroid.getContentPane().setLayout(null);
-		
+		initFrame();
 		JLabel name = new JLabel("NAME :");
 		name.setHorizontalAlignment(SwingConstants.CENTER);
 		name.setFont(new Font("Tahoma", Font.BOLD, 23));
@@ -44,18 +39,41 @@ public class AsteroidDetail {
 				"Relative Velocity (m/s)", "Closest Approach (KM)", "Diameter (KM)"
 			}
 		));
-		table.getColumnModel().getColumn(0).setResizable(false);
-		table.getColumnModel().getColumn(0).setPreferredWidth(152);
-		table.getColumnModel().getColumn(1).setResizable(false);
-		table.getColumnModel().getColumn(1).setPreferredWidth(155);
-		table.getColumnModel().getColumn(2).setResizable(false);
-		table.getColumnModel().getColumn(2).setPreferredWidth(115);
+
+		HashMap<Integer, Integer> colWidths = getColWidths();
+		for (int i = 0; i < 3; i++) {
+			table.getColumnModel().getColumn(i).setResizable(false);
+			table.getColumnModel().getColumn(i).setPreferredWidth(colWidths.get(i));
+		}
+
 		scrollPane.setViewportView(table);
-		
+
+		addHazardLabel();
+	}
+
+	public void initFrame() {
+		asteroid = new JFrame();
+		String Name = new String("Asteroid Detail");
+		asteroid.setTitle(Name);
+		asteroid.setBounds(0, 20, 500, 600);
+		asteroid.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		asteroid.getContentPane().setLayout(null);
+	}
+
+	public void addHazardLabel() {
 		JLabel hazard = new JLabel("Hazardous : True");
 		hazard.setHorizontalAlignment(SwingConstants.CENTER);
 		hazard.setFont(new Font("Tahoma", Font.BOLD, 23));
 		hazard.setBounds(12, 363, 458, 45);
 		asteroid.getContentPane().add(hazard);
 	}
+
+	public HashMap<Integer, Integer> getColWidths() {
+		HashMap<Integer, Integer> colWidths = new HashMap<Integer, Integer>();
+		colWidths.put(0, 152);
+		colWidths.put(1, 155);
+		colWidths.put(2, 115);
+		return colWidths;
+	}
+
 }

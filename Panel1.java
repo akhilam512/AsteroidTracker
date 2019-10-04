@@ -3,42 +3,57 @@ import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.event.*;
 
-public class Panel1 extends JPanel {
-    private JButton jcomp1;
-    private JButton jcomp2;
-    private JButton jcomp3;
-    private JLabel jcomp4;
-    private JLabel jcomp5;
-    private JTextArea jcomp6;
+public class Panel1 extends JPanel implements ActionListener {
+    private JButton submit_button;
+    private JButton asteroid_data_btn;
+    private JButton closest_ast_btn;
+    private JLabel asteroid_tracker;
+    private JLabel date_label;
+    private JTextArea date_text_area;
 
     public Panel1() {
         //construct components
-        jcomp1 = new JButton ("SUBMIT");
-        jcomp2 = new JButton ("Asteroid Data");
-        jcomp3 = new JButton ("Closest Asteroid");
-        jcomp4 = new JLabel ("                                  Asteroid Tracker");
-        jcomp5 = new JLabel ("Enter Date -");
-        jcomp6 = new JTextArea (5, 5);
+        submit_button = new JButton ("SUBMIT");
+        asteroid_data_btn = new JButton ("Asteroid Data");
+        closest_ast_btn = new JButton ("Closest Asteroid");
+        asteroid_tracker = new JLabel ("Asteroid Tracker");
+        date_label = new JLabel ("Enter Date: ");
+
+        date_text_area = new JTextArea (5, 5);
 
         //adjust size and set layout
         setPreferredSize (new Dimension (497, 496));
         setLayout (null);
 
+        // add fonts 
+        asteroid_tracker.setFont(new Font("Tahoma", Font.BOLD, 23));
+        date_label.setFont(new Font("Tahoma", Font.BOLD, 15));
+
+        // Add Event Listeners to buttons 
+        submit_button.setActionCommand("submit");
+        submit_button.addActionListener(this);
+
+        asteroid_data_btn.setActionCommand("ast_data_btn");
+        asteroid_data_btn.addActionListener(this);
+
+        closest_ast_btn.setActionCommand("closest_ast_btn");
+        closest_ast_btn.addActionListener(this);
+        
         //add components
-        add (jcomp1);
-        add (jcomp2);
-        add (jcomp3);
-        add (jcomp4);
-        add (jcomp5);
-        add (jcomp6);
+        add (submit_button);
+        add (asteroid_data_btn);
+        add (closest_ast_btn);
+        add (asteroid_tracker);
+        add (date_label);
+        add (date_text_area);
 
         //set component bounds (absolute positioning)
-        jcomp1.setBounds (150, 250, 200, 25);
-        jcomp2.setBounds (50, 350, 150, 50);
-        jcomp3.setBounds (300, 350, 150, 50);
-        jcomp4.setBounds (50, 50, 400, 80);
-        jcomp5.setBounds (150, 160, 100, 45);
-        jcomp6.setBounds (150, 205, 200, 25);
+        submit_button.setBounds (150, 250, 200, 25);
+        asteroid_data_btn.setBounds (50, 350, 150, 50);
+        closest_ast_btn.setBounds (300, 350, 150, 50);
+        asteroid_tracker.setBounds (150, 50, 400, 80);
+        date_label.setBounds (150, 140, 100, 45);
+        date_text_area.setBounds (150, 180, 200, 25);
     }
 
 
@@ -48,5 +63,20 @@ public class Panel1 extends JPanel {
         frame.getContentPane().add (new Panel1());
         frame.pack();
         frame.setVisible (true);
+    }
+
+    public void actionPerformed(ActionEvent event) {
+        String actionCommand = event.getActionCommand();
+        switch (actionCommand) {
+            case "submit":
+                System.out.println("Submit button clicked.");
+                break;
+            case "ast_data_btn":
+                System.out.println("Asteroid tracker clicked.");
+                break;
+            case "closest_ast_btn":
+                System.out.println("Closest Asteroid btn clicked.");
+                break;
+        }
     }
 }
