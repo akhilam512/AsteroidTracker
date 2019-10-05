@@ -47,20 +47,6 @@ class Backtest
 			jobj = (JSONObject) jobj.get("near_earth_objects");
 			//This doesn't seem to be working for some reason. If we are able to fix this issue then we can procced to using the data.
 			
-			Set<String> s = new HashSet<String>(); 
-			s = jobj.keySet();
-			String[] testarr = new String[s.size()];
-			int k = 0;
-			for (String i: s)
-				testarr[k++] = i;
-
-			//Store the JSON object in JSON array as objects (For level 1 array element i.e Results)		
-			JSONArray jsonarr_1 = (JSONArray) jobj.get(testarr[1]);
-			conn.disconnect();
-		}
-		catch(Exception e)
-		{
-			e.printStackTrace();
-		}
+	
 	}
 }
