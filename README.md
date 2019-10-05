@@ -35,6 +35,10 @@ The application will retrieve the asteroid data using [NASA’s open API](https:
 - Suraj K Suresh (@Freakston)
 - Akhil K Gangadharan (@akhilam512)
 
+## Communication channels: :e-mail:
+
+[Telegram]([https://t.me/AsteroidTracker)
+
 ## License :page_facing_up:
 
 This project is licensed under GNU GPL v3.
