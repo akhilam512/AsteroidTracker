@@ -1,7 +1,23 @@
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.awt.*;
 import java.awt.event.*;
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
 import javax.swing.*;
 import javax.swing.event.*;
+
 
 public class Panel1 extends JPanel implements ActionListener {
     private JButton submit_button;
@@ -10,8 +26,11 @@ public class Panel1 extends JPanel implements ActionListener {
     private JLabel asteroid_tracker;
     private JLabel date_label;
     private JTextArea date_text_area;
+    private static List<Asteroid> asteroids = null;
+
 
     public Panel1() {
+
         //construct components
         submit_button = new JButton ("SUBMIT");
         asteroid_data_btn = new JButton ("Asteroid Data");
@@ -25,11 +44,11 @@ public class Panel1 extends JPanel implements ActionListener {
         setPreferredSize (new Dimension (497, 496));
         setLayout (null);
 
-        // add fonts 
+        // add fonts
         asteroid_tracker.setFont(new Font("Tahoma", Font.BOLD, 23));
         date_label.setFont(new Font("Tahoma", Font.BOLD, 15));
 
-        // Add Event Listeners to buttons 
+        // Add Event Listeners to buttons
         submit_button.setActionCommand("submit");
         submit_button.addActionListener(this);
 
@@ -38,7 +57,7 @@ public class Panel1 extends JPanel implements ActionListener {
 
         closest_ast_btn.setActionCommand("closest_ast_btn");
         closest_ast_btn.addActionListener(this);
-        
+
         //add components
         add (submit_button);
         add (asteroid_data_btn);
@@ -57,7 +76,66 @@ public class Panel1 extends JPanel implements ActionListener {
     }
 
 
-    public static void main (String[] args) {
+    /**
+     * @return List<Asteroid>
+     * @throws IOException
+     * @throws JSONException
+     * @throws ParseException
+     */
+    public static List<Asteroid> getAsteroids() throws IOException, JSONException, ParseException {
+        List<Asteroid> asteroids = new ArrayList<>();
+        OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder()
+                .url("https://api.nasa.gov/neo/rest/v1/feed?start_date=2019-09-01&api_key=BzB2orclxfvtyCtkKwX3PVr5xgdTQKSjo0JYQeVv")
+                .get()
+                .build();
+        Response response = client.newCall(request).execute();
+
+        String jsonData = response.body().string();
+        JSONObject json = new JSONObject(jsonData);
+        JSONObject data = (JSONObject) json.get("near_earth_objects");
+        int asteroid_count = json.getInt("element_count");
+
+
+        for (Iterator iterator = data.keySet().iterator(); iterator.hasNext(); ) {
+            String key = (String) iterator.next();
+            JSONArray day = (JSONArray) data.get(key);
+
+            for (int i = 0; i < day.length(); i++) {
+                JSONObject asteroidJson = day.getJSONObject(i);
+                String nameOfAsteroid = asteroidJson.getString("name");
+                boolean isHazardous = asteroidJson.getBoolean("is_potentially_hazardous_asteroid");
+
+                JSONObject diameterObject = asteroidJson.getJSONObject("estimated_diameter").getJSONObject("kilometers");
+                Double diameter = diameterObject.getDouble("estimated_diameter_min") + diameterObject.getDouble("estimated_diameter_max");
+                diameter /= 2;
+
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+                String date = (String) asteroidJson
+                        .getJSONArray("close_approach_data")
+                        .getJSONObject(0)
+                        .get("close_approach_date");
+
+                Date approach_date = formatter.parse(date);
+
+                Double closest_approach = asteroidJson.getJSONArray("close_approach_data")
+                        .getJSONObject(0)
+                        .getJSONObject("miss_distance")
+                        .getDouble("kilometers");
+
+                Asteroid asteroid = new Asteroid(nameOfAsteroid, approach_date, diameter, closest_approach, isHazardous);
+                asteroids.add(asteroid);
+
+            }
+        }
+        for (Asteroid a : asteroids) {
+            System.out.println(a.toString());
+        }
+        return asteroids;
+    }
+
+
+    public static void main (String[] args) throws IOException, ParseException {
         JFrame frame = new JFrame ("Main Panel");
         frame.setDefaultCloseOperation (JFrame.EXIT_ON_CLOSE);
         frame.getContentPane().add (new Panel1());
@@ -70,6 +148,19 @@ public class Panel1 extends JPanel implements ActionListener {
         switch (actionCommand) {
             case "submit":
                 System.out.println("Submit button clicked.");
+                DateFormat format = new SimpleDateFormat("yyyy/dd/MM");
+                format.setLenient(false);
+                try {
+                    String date = date_text_area.getText();
+                    format.parse(date);
+                    asteroids = getAsteroids();
+                    AsteroidList window = new AsteroidList(asteroids, asteroid_count);
+                    window.asteroidList.setVisible(true);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
                 break;
             case "ast_data_btn":
                 System.out.println("Asteroid tracker clicked.");
