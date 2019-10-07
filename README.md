@@ -37,7 +37,7 @@ The application will retrieve the asteroid data using [NASA’s open API](https:
 
 ## Communication channels: :e-mail:
 
-[Telegram]([https://t.me/AsteroidTracker)
+[Telegram](https://t.me/AsteroidTracker)
 
 ## License :page_facing_up:
 
