@@ -16,7 +16,6 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import javax.swing.*;
-import javax.swing.event.*;
 
 
 public class Panel1 extends JPanel implements ActionListener {
@@ -26,23 +25,24 @@ public class Panel1 extends JPanel implements ActionListener {
     private JLabel asteroid_tracker;
     private JLabel date_label;
     private JTextArea date_text_area;
+
     private static List<Asteroid> asteroids = null;
+    private static int asteroid_count;
 
 
     public Panel1() {
-
         //construct components
-        submit_button = new JButton ("SUBMIT");
-        asteroid_data_btn = new JButton ("Asteroid Data");
-        closest_ast_btn = new JButton ("Closest Asteroid");
-        asteroid_tracker = new JLabel ("Asteroid Tracker");
-        date_label = new JLabel ("Enter Date: ");
+        submit_button = new JButton("SUBMIT");
+        asteroid_data_btn = new JButton("Asteroid Data");
+        closest_ast_btn = new JButton("Closest Asteroid");
+        asteroid_tracker = new JLabel("Asteroid Tracker");
+        date_label = new JLabel("Enter Date: ");
 
-        date_text_area = new JTextArea (5, 5);
+        date_text_area = new JTextArea(5, 5);
 
         //adjust size and set layout
-        setPreferredSize (new Dimension (497, 496));
-        setLayout (null);
+        setPreferredSize(new Dimension(497, 496));
+        setLayout(null);
 
         // add fonts
         asteroid_tracker.setFont(new Font("Tahoma", Font.BOLD, 23));
@@ -59,22 +59,21 @@ public class Panel1 extends JPanel implements ActionListener {
         closest_ast_btn.addActionListener(this);
 
         //add components
-        add (submit_button);
-        add (asteroid_data_btn);
-        add (closest_ast_btn);
-        add (asteroid_tracker);
-        add (date_label);
-        add (date_text_area);
+        add(submit_button);
+        add(asteroid_data_btn);
+        add(closest_ast_btn);
+        add(asteroid_tracker);
+        add(date_label);
+        add(date_text_area);
 
         //set component bounds (absolute positioning)
-        submit_button.setBounds (150, 250, 200, 25);
-        asteroid_data_btn.setBounds (50, 350, 150, 50);
-        closest_ast_btn.setBounds (300, 350, 150, 50);
-        asteroid_tracker.setBounds (150, 50, 400, 80);
-        date_label.setBounds (150, 140, 100, 45);
-        date_text_area.setBounds (150, 180, 200, 25);
+        submit_button.setBounds(150, 250, 200, 25);
+        asteroid_data_btn.setBounds(50, 350, 150, 50);
+        closest_ast_btn.setBounds(300, 350, 150, 50);
+        asteroid_tracker.setBounds(150, 50, 400, 80);
+        date_label.setBounds(150, 140, 100, 45);
+        date_text_area.setBounds(150, 180, 200, 25);
     }
-
 
     /**
      * @return List<Asteroid>
@@ -82,11 +81,11 @@ public class Panel1 extends JPanel implements ActionListener {
      * @throws JSONException
      * @throws ParseException
      */
-    public static List<Asteroid> getAsteroids() throws IOException, JSONException, ParseException {
+    public static List<Asteroid> getAsteroids(String date) throws IOException, JSONException, ParseException {
         List<Asteroid> asteroids = new ArrayList<>();
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
-                .url("https://api.nasa.gov/neo/rest/v1/feed?start_date=2019-09-01&api_key=BzB2orclxfvtyCtkKwX3PVr5xgdTQKSjo0JYQeVv")
+                .url("https://api.nasa.gov/neo/rest/v1/feed?start_date=" + date + "&api_key=BzB2orclxfvtyCtkKwX3PVr5xgdTQKSjo0JYQeVv")
                 .get()
                 .build();
         Response response = client.newCall(request).execute();
@@ -94,8 +93,10 @@ public class Panel1 extends JPanel implements ActionListener {
         String jsonData = response.body().string();
         JSONObject json = new JSONObject(jsonData);
         JSONObject data = (JSONObject) json.get("near_earth_objects");
-        int asteroid_count = json.getInt("element_count");
 
+        //////////	
+
+        asteroid_count = json.getInt("element_count");
 
         for (Iterator iterator = data.keySet().iterator(); iterator.hasNext(); ) {
             String key = (String) iterator.next();
@@ -109,15 +110,12 @@ public class Panel1 extends JPanel implements ActionListener {
                 JSONObject diameterObject = asteroidJson.getJSONObject("estimated_diameter").getJSONObject("kilometers");
                 Double diameter = diameterObject.getDouble("estimated_diameter_min") + diameterObject.getDouble("estimated_diameter_max");
                 diameter /= 2;
-
                 SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-                String date = (String) asteroidJson
+                String dateOfApproach = (String) asteroidJson
                         .getJSONArray("close_approach_data")
                         .getJSONObject(0)
                         .get("close_approach_date");
-
-                Date approach_date = formatter.parse(date);
-
+                Date approach_date = formatter.parse(dateOfApproach);
                 Double closest_approach = asteroidJson.getJSONArray("close_approach_data")
                         .getJSONObject(0)
                         .getJSONObject("miss_distance")
@@ -135,12 +133,12 @@ public class Panel1 extends JPanel implements ActionListener {
     }
 
 
-    public static void main (String[] args) throws IOException, ParseException {
-        JFrame frame = new JFrame ("Main Panel");
-        frame.setDefaultCloseOperation (JFrame.EXIT_ON_CLOSE);
-        frame.getContentPane().add (new Panel1());
+    public static void main(String[] args) throws IOException, ParseException {
+        JFrame frame = new JFrame("Main Panel");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.getContentPane().add(new Panel1());
         frame.pack();
-        frame.setVisible (true);
+        frame.setVisible(true);
     }
 
     public void actionPerformed(ActionEvent event) {
@@ -148,12 +146,10 @@ public class Panel1 extends JPanel implements ActionListener {
         switch (actionCommand) {
             case "submit":
                 System.out.println("Submit button clicked.");
-                DateFormat format = new SimpleDateFormat("yyyy/dd/MM");
-                format.setLenient(false);
                 try {
-                    String date = date_text_area.getText();
-                    format.parse(date);
-                    asteroids = getAsteroids();
+                    String date1 = getDateFromTextArea();
+                    System.out.println(date1);
+                    asteroids = getAsteroids(date1);
                     AsteroidList window = new AsteroidList(asteroids, asteroid_count);
                     window.asteroidList.setVisible(true);
                 } catch (IOException e) {
@@ -169,5 +165,13 @@ public class Panel1 extends JPanel implements ActionListener {
                 System.out.println("Closest Asteroid btn clicked.");
                 break;
         }
+    }
+
+    private String getDateFromTextArea() throws ParseException {
+        Date date = new SimpleDateFormat("dd/MM/yyyy").parse(date_text_area.getText().trim());
+        String pattern = "yyyy-MM-dd";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+        String date1 = simpleDateFormat.format(date);
+        return date1;
     }
 }
