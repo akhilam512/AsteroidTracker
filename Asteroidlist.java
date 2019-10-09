@@ -13,7 +13,7 @@ public class AsteroidList {
 
     private List<Asteroid> asteroids;
     private int numberOfAsteroids;
-    private JFrame asteroidList;
+    JFrame asteroidList;
     private JTable table;
 
 //    public static void main(String[] args) {

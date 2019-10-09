@@ -4,7 +4,6 @@ import okhttp3.Response;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
@@ -131,7 +130,6 @@ public class Panel1 extends JPanel implements ActionListener {
         }
         return asteroids;
     }
-
 
     public static void main(String[] args) throws IOException, ParseException {
         JFrame frame = new JFrame("Main Panel");
