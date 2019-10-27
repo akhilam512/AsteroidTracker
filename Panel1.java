@@ -4,6 +4,7 @@ import okhttp3.Response;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
@@ -27,9 +28,11 @@ public class Panel1 extends JPanel implements ActionListener {
 
     private static List<Asteroid> asteroids = null;
     private static int asteroid_count;
-
+    Image background;
 
     public Panel1() {
+        background = Toolkit.getDefaultToolkit().getImage("./background.png");
+
         //construct components
         submit_button = new JButton("SUBMIT");
         asteroid_data_btn = new JButton("Asteroid Data");
@@ -46,6 +49,10 @@ public class Panel1 extends JPanel implements ActionListener {
         // add fonts
         asteroid_tracker.setFont(new Font("Tahoma", Font.BOLD, 23));
         date_label.setFont(new Font("Tahoma", Font.BOLD, 15));
+
+        //font colors
+        asteroid_tracker.setForeground(Color.WHITE);
+        date_label.setForeground(Color.WHITE);
 
         // Add Event Listeners to buttons
         submit_button.setActionCommand("submit");
@@ -72,6 +79,12 @@ public class Panel1 extends JPanel implements ActionListener {
         asteroid_tracker.setBounds(150, 50, 400, 80);
         date_label.setBounds(150, 140, 100, 45);
         date_text_area.setBounds(150, 180, 200, 25);
+    }
+
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        g.drawImage(background, 0, 0, getWidth(), getHeight(), null);
     }
 
     /**
@@ -135,6 +148,7 @@ public class Panel1 extends JPanel implements ActionListener {
         JFrame frame = new JFrame("Main Panel");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.getContentPane().add(new Panel1());
+        frame.setResizable(false);
         frame.pack();
         frame.setVisible(true);
     }

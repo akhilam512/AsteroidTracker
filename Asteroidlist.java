@@ -9,7 +9,7 @@ import javax.swing.table.DefaultTableModel;
 import java.util.HashMap;
 import java.util.List;
 
-public class AsteroidList {
+class AsteroidList {
 
     private List<Asteroid> asteroids;
     private int numberOfAsteroids;
