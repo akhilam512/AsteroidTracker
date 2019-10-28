@@ -25,6 +25,7 @@ public class Panel1 extends JPanel implements ActionListener {
     private JLabel asteroid_tracker;
     private JLabel date_label;
     private JTextArea date_text_area;
+    private Image background;
 
     private static List<Asteroid> asteroids = null;
     private static int asteroid_count;
@@ -39,6 +40,8 @@ public class Panel1 extends JPanel implements ActionListener {
         closest_ast_btn = new JButton("Closest Asteroid");
         asteroid_tracker = new JLabel("Asteroid Tracker");
         date_label = new JLabel("Enter Date: ");
+        //can be updated to use asteroid_tracker.jpg if blurred not wanted
+        background = Toolkit.getDefaultToolkit().getImage("./asteroid_tracker_blur.jpg");
 
         date_text_area = new JTextArea(5, 5);
 
@@ -47,6 +50,8 @@ public class Panel1 extends JPanel implements ActionListener {
         setLayout(null);
 
         // add fonts
+        asteroid_tracker.setForeground(Color.WHITE);
+        date_label.setForeground(Color.WHITE);
         asteroid_tracker.setFont(new Font("Tahoma", Font.BOLD, 23));
         date_label.setFont(new Font("Tahoma", Font.BOLD, 15));
 
