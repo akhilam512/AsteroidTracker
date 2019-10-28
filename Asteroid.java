@@ -6,7 +6,10 @@ public class Asteroid {
     private Double diameter, missing_approach;
     private boolean isHazardous;
 
-    public Asteroid(){}
+    public Asteroid()
+    {
+
+    }
 
     /**
      * @param name Asteroid Name
@@ -67,9 +70,10 @@ public class Asteroid {
     public String toString() {
         return "Asteroid "+ name
                 + " with diameter "+ diameter
-                + " approached to world on " + approach_date.toString()
+                + " approached to our world on " + approach_date.toString()
                 + " from the distance of " + missing_approach
                 + (missing_approach==1.0 ? " kilometer" : " kilometers") + " and this asteroid is "
-                + (isHazardous? "hazardous." : "not hazardous.");
+                + (isHazardous? "hazardous." : "not hazardous.")
+                + " be carefull";
     }
 }
